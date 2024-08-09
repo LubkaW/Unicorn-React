@@ -5,11 +5,13 @@ function recipeGrid(props) {
     return (
         <Container>
             <h1>List of recipes</h1>
-            {props.recipes.map((recipe) => (
-                <Col>
-                    <RecipeCard recipe={recipe} />
-                </Col>
-            ))}
+            <Row>
+                {props.recipes.map((recipe) => (
+                    <Col md={5} key={recipe.id}>
+                        <RecipeCard recipe={recipe} />
+                    </Col>
+                ))}
+            </Row>
         </Container>
     );
 }
