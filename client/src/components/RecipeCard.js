@@ -8,7 +8,7 @@ function recipeCard(props) {
             <Card.Img className={styles.cardImage} variant="top" src={logo}/>
             <Card.Body className={styles.cardBody}>
                 <Card.Title className={styles.cardTitle}>{props.recipe.name}</Card.Title>
-                <Card.Text>
+                <Card.Text className={styles.cardText}>
                     {props.recipe.description}
                 </Card.Text>
             </Card.Body>

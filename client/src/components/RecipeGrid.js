@@ -7,7 +7,7 @@ function recipeGrid(props) {
             <h1>List of recipes</h1>
             <Row>
                 {props.recipes.map((recipe) => (
-                    <Col md={5} key={recipe.id}>
+                    <Col lg={3} md={4} sm={6} xs={12} key={recipe.id}>
                         <RecipeCard recipe={recipe} />
                     </Col>
                 ))}

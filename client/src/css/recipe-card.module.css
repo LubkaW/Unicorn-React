@@ -1,6 +1,10 @@
+:root {
+    --num_of_lines: 5;
+}
+
 .card {
-    width: 18rem;
-    margin: auto;
+    width: 100%;
+    margin: 10px;
     box-shadow: 3px 3px 6px black;
     border-radius: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -24,4 +28,15 @@
 
 .cardTitle {
     font-weight: bold;
+}
+
+.cardText {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: var(--num_of_lines);
+    height: calc(1.2em * var(--num_of_lines));
+    line-height: 1.2em;
+    max-height: calc(1.2em * var(--num_of_lines));
 }
