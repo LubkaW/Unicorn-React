@@ -1,6 +1,6 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import RecipeGrid from "./components/RecipeGrid";
+import RecipeList from "./components/RecipeList";
 
 const recipeList = [
     {
@@ -425,7 +425,7 @@ const recipeList = [
 function App() {
   return (
     <div className="App">
-      <RecipeGrid recipes={recipeList}/>
+      <RecipeList recipes={recipeList}/>
     </div>
   );
 }

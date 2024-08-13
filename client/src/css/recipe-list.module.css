@@ -1,0 +1,15 @@
+.navbar {
+    background-color: #e7eacd; /* Light background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 1rem; /* Space below the navbar */
+}
+
+.navbarBrand {
+    color: #343a40; /* Darker text color for brand */
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.navLinks {
+    font-size: 20px;
+}

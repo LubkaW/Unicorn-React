@@ -2,13 +2,13 @@ import {Card} from "react-bootstrap";
 import logo from "../food_placeholder.png"
 import styles from "../css/recipe-card.module.css"
 
-function recipeCard(props) {
+function RecipeCard(props) {
     return (
         <Card className={styles.card}>
             <Card.Img className={styles.cardImage} variant="top" src={logo}/>
             <Card.Body className={styles.cardBody}>
                 <Card.Title className={styles.cardTitle}>{props.recipe.name}</Card.Title>
-                <Card.Text className={styles.cardText}>
+                <Card.Text className={props.textStyle}>
                     {props.recipe.description}
                 </Card.Text>
             </Card.Body>
@@ -16,4 +16,4 @@ function recipeCard(props) {
     );
 }
 
-export default recipeCard;
+export default RecipeCard;

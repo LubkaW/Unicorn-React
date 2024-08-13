@@ -1,5 +1,6 @@
 :root {
-    --num_of_lines: 5;
+    --num_of_lines_big: 5;
+    --num_of_lines_small: 2;
 }
 
 .card {
@@ -30,13 +31,24 @@
     font-weight: bold;
 }
 
-.cardText {
+.cardTextBig {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: var(--num_of_lines);
-    height: calc(1.2em * var(--num_of_lines));
+    -webkit-line-clamp: var(--num_of_lines_big);
+    height: calc(1.2em * var(--num_of_lines_big));
     line-height: 1.2em;
-    max-height: calc(1.2em * var(--num_of_lines));
+    max-height: calc(1.2em * var(--num_of_lines_big));
+}
+
+.cardTextSmall {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: var(--num_of_lines_small);
+    height: calc(1.2em * var(--num_of_lines_small));
+    line-height: 1.2em;
+    max-height: calc(1.2em * var(--num_of_lines_small));
 }
