@@ -1,13 +1,84 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import RecipeTable from "./RecipeTable";
 import RecipeGrid from "./RecipeGrid";
 import {Container, Nav, Navbar} from "react-bootstrap";
 import styles from "../css/recipe-list.module.css"
 import stylesCard from "../css/recipe-card.module.css"
+import Icon from "@mdi/react";
+import {mdiLoading} from "@mdi/js";
 
-function RecipeList(props) {
+function RecipeList() {
 
     const [viewType, setViewType] = useState("small")
+    const [recipeLoadCall, setRecipeLoadCall] = useState({
+        state: "pending",
+    });
+    const [ingredientsLoadCall, setIngredientsLoadCall] = useState({data: []});
+
+    useEffect(() => {
+        fetch(`http://localhost:3000/recipe/list`, {
+            method: "GET",
+        }).then(async (response) => {
+            const responseJson = await response.json();
+            if (response.status >= 400) {
+                setRecipeLoadCall({ state: "error", error: responseJson });
+            } else {
+                setRecipeLoadCall({ state: "success", data: responseJson });
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        fetch(`http://localhost:3000/ingredient/list`, {
+            method: "GET",
+        }).then(async (response) => {
+            const responseJson = await response.json();
+            if (response.status >= 400) {
+                setIngredientsLoadCall({data: []});
+            } else {
+                setIngredientsLoadCall({ data: responseJson });
+            }
+        });
+    }, [recipeLoadCall]);
+
+    function combineIngredients() {
+        if (ingredientsLoadCall.data.length) {
+            return {}
+        }
+    }
+
+    function getRecipes() {
+        switch (recipeLoadCall.state) {
+            case "pending":
+                return (
+                    <div className={styles.loading}>
+                        <Icon size={2} path={mdiLoading} spin={true} />
+                    </div>
+                );
+            case "success":
+                return (
+                    <div>
+                        {/* Render view based on selected type */}
+
+                        <div style={{marginTop: '20px'}}>
+                            {viewType === 'small' && <RecipeGrid recipes={recipeLoadCall.data} smallDetail/>}
+                            {viewType === 'big' && <RecipeGrid recipes={recipeLoadCall.data} />}
+                            {viewType === 'table' && <RecipeTable recipes={recipeLoadCall.data}/>}
+                        </div>
+                    </div>
+                );
+            case "error":
+                return (
+                    <div className={styles.error}>
+                        <div>Nepodařilo se načíst data pro seznam receptů.</div>
+                        <br />
+                        <pre>{JSON.stringify(recipeLoadCall.error, null, 2)}</pre>
+                    </div>
+                );
+            default:
+                return null;
+        }
+    }
 
     return (
         <div>
@@ -32,14 +103,12 @@ function RecipeList(props) {
                 </Container>
             </Navbar>
 
-            {/* Render view based on selected type */}
-            <div style={{marginTop: '20px'}}>
-                {viewType === 'small' && <RecipeGrid recipes={props.recipes} textStyle={stylesCard.cardTextSmall}/>}
-                {viewType === 'big' && <RecipeGrid recipes={props.recipes} textStyle={stylesCard.cardTextBig}/>}
-                {viewType === 'table' && <RecipeTable recipes={props.recipes}/>}
-            </div>
+            {getRecipes()}
         </div>
     );
+
+
+
 
 }
 
