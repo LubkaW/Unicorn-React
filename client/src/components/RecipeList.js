@@ -3,7 +3,6 @@ import RecipeTable from "./RecipeTable";
 import RecipeGrid from "./RecipeGrid";
 import {Container, Nav, Navbar} from "react-bootstrap";
 import styles from "../css/recipe-list.module.css"
-import stylesCard from "../css/recipe-card.module.css"
 import Icon from "@mdi/react";
 import {mdiLoading} from "@mdi/js";
 
@@ -36,16 +35,10 @@ function RecipeList() {
             if (response.status >= 400) {
                 setIngredientsLoadCall({data: []});
             } else {
-                setIngredientsLoadCall({ data: responseJson });
+                setIngredientsLoadCall({data: responseJson });
             }
         });
-    }, [recipeLoadCall]);
-
-    function combineIngredients() {
-        if (ingredientsLoadCall.data.length) {
-            return {}
-        }
-    }
+    }, []);
 
     function getRecipes() {
         switch (recipeLoadCall.state) {
@@ -59,9 +52,8 @@ function RecipeList() {
                 return (
                     <div>
                         {/* Render view based on selected type */}
-
                         <div style={{marginTop: '20px'}}>
-                            {viewType === 'small' && <RecipeGrid recipes={recipeLoadCall.data} smallDetail/>}
+                            {viewType === 'small' && <RecipeGrid recipes={recipeLoadCall.data} ingredients={ingredientsLoadCall.data} smallDetail/>}
                             {viewType === 'big' && <RecipeGrid recipes={recipeLoadCall.data} />}
                             {viewType === 'table' && <RecipeTable recipes={recipeLoadCall.data}/>}
                         </div>
