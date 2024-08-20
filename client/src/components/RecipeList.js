@@ -1,10 +1,10 @@
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import RecipeTable from "./RecipeTable";
 import RecipeGrid from "./RecipeGrid";
-import {Container, Nav, Navbar} from "react-bootstrap";
+import {Button, Container, Form, Nav, Navbar} from "react-bootstrap";
 import styles from "../css/recipe-list.module.css"
 import Icon from "@mdi/react";
-import {mdiLoading} from "@mdi/js";
+import {mdiLoading, mdiMagnify} from "@mdi/js";
 
 function RecipeList() {
 
@@ -13,6 +13,18 @@ function RecipeList() {
         state: "pending",
     });
     const [ingredientsLoadCall, setIngredientsLoadCall] = useState({data: []});
+    const [searchBy, setSearchBy] = useState("");
+
+    const filteredRecipeList = useMemo(() => {
+        if (recipeLoadCall.data != null) {
+            return recipeLoadCall.data.filter((recipe) => {
+                return (
+                    recipe.description.toLocaleLowerCase().includes(searchBy.toLocaleLowerCase()) ||
+                    recipe.name.toLocaleLowerCase().includes(searchBy.toLocaleLowerCase())
+                );
+            });
+        }
+    }, [searchBy, recipeLoadCall.data]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/recipe/list`, {
@@ -40,6 +52,17 @@ function RecipeList() {
         });
     }, []);
 
+
+
+    function handleSearch(event) {
+        event.preventDefault();
+        setSearchBy(event.target["searchInput"].value);
+    }
+
+    function handleSearchDelete(event) {
+        if (!event.target.value) setSearchBy("");
+    }
+
     function getRecipes() {
         switch (recipeLoadCall.state) {
             case "pending":
@@ -53,9 +76,9 @@ function RecipeList() {
                     <div>
                         {/* Render view based on selected type */}
                         <div style={{marginTop: '20px'}}>
-                            {viewType === 'small' && <RecipeGrid recipes={recipeLoadCall.data} ingredients={ingredientsLoadCall.data} smallDetail/>}
-                            {viewType === 'big' && <RecipeGrid recipes={recipeLoadCall.data} />}
-                            {viewType === 'table' && <RecipeTable recipes={recipeLoadCall.data}/>}
+                            {viewType === 'small' && <RecipeGrid recipes={filteredRecipeList} ingredients={ingredientsLoadCall.data} smallDetail/>}
+                            {viewType === 'big' && <RecipeGrid recipes={filteredRecipeList} />}
+                            {viewType === 'table' && <RecipeTable recipes={filteredRecipeList}/>}
                         </div>
                     </div>
                 );
@@ -78,7 +101,7 @@ function RecipeList() {
             <Navbar expand="lg" className={styles.navbar}>
                 <Container>
                     <Navbar.Brand className={styles.navbarBrand}>Lubka Recipes</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className={styles.navLinks}>
                             <Nav.Link onClick={() => setViewType('small')}>
@@ -92,14 +115,27 @@ function RecipeList() {
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
+                    <div>
+                        <Form className="d-flex" onSubmit={handleSearch}>
+                            <Form.Control
+                                id={"searchInput"}
+                                style={{maxWidth: "250px"}}
+                                type="search"
+                                placeholder="Search"
+                                aria-label="Search"
+                                onChange={handleSearchDelete}
+                            />
+                            <Button style={{marginLeft: "8px"}} variant="outline-success" type="submit">
+                                <Icon size={1} path={mdiMagnify}/>
+                            </Button>
+                        </Form>
+                    </div>
                 </Container>
             </Navbar>
 
             {getRecipes()}
         </div>
     );
-
-
 
 
 }

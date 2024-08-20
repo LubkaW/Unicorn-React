@@ -1,6 +1,7 @@
 :root {
-    --num_of_lines_big: 5;
+    --num_of_lines_big: 10;
     --num_of_lines_small: 2;
+    --card-bg-color: #faf6eb;
 }
 
 .card {
@@ -9,7 +10,7 @@
     box-shadow: 3px 3px 6px black;
     border-radius: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #faf6eb;
+    background-color: var(--card-bg-color);
 }
 
 .card:hover {
@@ -43,15 +44,34 @@
 }
 
 .cardTextSmall {
-}
-
-.cardTextSmallT {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    -webkit-line-clamp: var(--num_of_lines_small);
-    height: calc(1.2em * var(--num_of_lines_small));
+    -webkit-line-clamp: 1;
+    height: 1.2em;
     line-height: 1.2em;
-    max-height: calc(1.2em * var(--num_of_lines_small));
+    max-height: 1.2em;
+    margin-bottom: 10px;
+    margin-left: 0;
+    text-align: left;
+}
+
+
+.listGroup {
+    background-color: var(--card-bg-color);
+    border: none;
+}
+
+.listGroupItem {
+    background-color: transparent;
+    border: none;
+    padding: 3px 0;
+    margin-left: 0;
+    display: flex;
+    align-items: center;
+}
+
+.listGroupItem span {
+    margin-right: 5px;
 }
