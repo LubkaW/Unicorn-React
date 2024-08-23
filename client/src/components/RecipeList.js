@@ -36,11 +36,11 @@ function RecipeList() {
             } else {
                 setRecipeLoadCall({ state: "success", data: responseJson });
             }
-        });
+        }).catch((err) => {setRecipeLoadCall({ state: "error", error: err });});
     }, []);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/ingredient/list`, {
+        fetch(`http://localhost:3000/ingredient/listt`, {
             method: "GET",
         }).then(async (response) => {
             const responseJson = await response.json();
@@ -49,7 +49,7 @@ function RecipeList() {
             } else {
                 setIngredientsLoadCall({data: responseJson });
             }
-        });
+        }).catch(() => setIngredientsLoadCall({data: []}));
     }, []);
 
 
