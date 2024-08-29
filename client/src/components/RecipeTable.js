@@ -10,10 +10,10 @@ function RecipeTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.recipes.map((recipe, index) => (
-                    <tr key={recipe.id}>
-                        <td style={{ textAlign: 'left' }}>{recipe.id}</td>
-                        <td style={{ textAlign: 'left' }}>{recipe.name}</td>
+                {props.entities.map((entity) => (
+                    <tr key={entity.id}>
+                        <td style={{ textAlign: 'left' }}>{entity.id}</td>
+                        <td style={{ textAlign: 'left' }}>{entity.name}</td>
                     </tr>
                 ))}
             </tbody>
