@@ -1,4 +1,4 @@
-import {useParams, useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import styles from "../css/recipe-list.module.css";
 import Icon from "@mdi/react";

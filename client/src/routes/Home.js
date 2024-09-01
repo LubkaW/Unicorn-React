@@ -1,6 +1,6 @@
 
 function Home() {
-    return <div>Will be implemented</div>
+    return <div>It's not much but it's honest work</div>
 }
 
 export default Home;
