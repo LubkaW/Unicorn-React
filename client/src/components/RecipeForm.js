@@ -1,16 +1,16 @@
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import Icon from "@mdi/react";
-import {mdiLoading} from "@mdi/js";
+import {mdiClose, mdiLoading, mdiTrashCan} from "@mdi/js";
 
-function RecipeForm({showModal, handleCloseModal, onComplete}){
+function RecipeForm({showModal, handleCloseModal, onComplete, recipe}){
 
-    const ingAtributesNames = ["id", "amount", "unit"]
     const defaultForm = {
         name: "",
         description: "",
         ingredients: []
     }
+    const ingAtributesNames = ["id", "amount", "unit"]
 
     const [validated, setValidated] = useState(false);
     const [formData, setFormData] = useState(defaultForm);
@@ -22,9 +22,22 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
     });
 
     const handleClose = () => {
-        setFormData(defaultForm);
+        setFormData(defaultForm)
         handleCloseModal();
     }
+
+    useEffect(() => {
+        if (recipe) {
+            setFormData(
+                {
+                    name: recipe.name,
+                    description: recipe.description,
+                    ingredients: recipe.ingredients
+                });
+        } else {
+            setFormData(defaultForm);
+        }
+    }, [recipe]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/ingredient/list`, {
@@ -54,15 +67,27 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
         });
     };
 
+    const removeIngredientForm = (index) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            ingredients: prevFormData.ingredients.filter((_, i) => i !== index)
+        }));
+    };
+
     const handleSubmit = async (e) => {
         const form = e.currentTarget;
 
         e.preventDefault();
         e.stopPropagation();
 
-        const payload = {
-            ...formData,
-        };
+
+        const payload =
+            recipe ? {
+                ...formData,
+                id: recipe.id
+            }
+            :
+            {...formData,};
 
         if (!form.checkValidity()) {
             setValidated(true);
@@ -70,7 +95,7 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
         }
 
         setRecipeAddCall({ state: 'pending' });
-        const res = await fetch(`http://localhost:3000/recipe/create`, {
+        const res = await fetch(`http://localhost:3000/recipe/${recipe ? 'update' : 'create'}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -110,58 +135,79 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
     function makeIngredientForm() {
         if (ingredientLoadCall.state === "error") {
             return (<div>Chyba při načítání možných ingrediencí</div>)
-        } else {
-            return formData.ingredients.map((form, index) => {
-                return(<div className="d-flex flex-row gap-1" key={form.id}>
-                        <Form.Group>
-                                <Form.Label>Ingredience</Form.Label>
-                                <Form.Select
-                                    value={form.id}
-                                    onChange={(e) => setField("id", e.target.value, index)}
-                                    required
-                                >
-                                    <option value="">Vyber ingredienci</option>
-                                    {ingredientLoadCall.data && ingredientLoadCall.data.map((ingredient) => (
-                                        <option key={ingredient.id} value={ingredient.id}>
-                                            {ingredient.name}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                        </Form.Group>
-                        <Form.Group>
-                                <Form.Label>Počet</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    value={form.amount}
-                                    onChange={(e) => setField("amount", e.target.value, index)}
-                                    min={1}
-                                    max={20}
-                                    required
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    Zadejte hodnotu mezi 1 - 20
-                                </Form.Control.Feedback>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Jednotka</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={form.unit}
-                                onChange={(e) => setField("unit", e.target.value, index)}
-                                required
-                            />
-                        </Form.Group>
-                </div>)
-            });
+        } else if (formData.ingredients.length !== 0) {
+                return (
+                    <>
+                        <Row className="mb-2">
+                            <Col md={6}><strong>Ingredience</strong></Col>
+                            <Col md={3}><strong>Počet</strong></Col>
+                            <Col md={2}><strong>Jednotka</strong></Col>
+                            <Col md={1}></Col> {/* Empty column for the delete button */}
+                        </Row>
+                        {formData.ingredients.map((form, index) => (
+                            <Row className="mb-2" key={form.id}>
+                                <Col md={6}>
+                                    <Form.Group>
+                                        <Form.Select
+                                            value={form.id}
+                                            onChange={(e) => setField("id", e.target.value, index)}
+                                            required
+                                        >
+                                            <option value="">Vyber ingredienci</option>
+                                            {ingredientLoadCall.data && ingredientLoadCall.data.map((ingredient) => (
+                                                <option key={ingredient.id} value={ingredient.id}>
+                                                    {ingredient.name}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={3}>
+                                    <Form.Group>
+                                        <Form.Control
+                                            type="number"
+                                            value={form.amount}
+                                            onChange={(e) => setField("amount", e.target.value, index)}
+                                            min={1}
+                                            max={1000}
+                                            required
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            Zadejte hodnotu mezi 1 - 1000
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </Col>
+                                <Col md={2}>
+                                    <Form.Group>
+                                        <Form.Control
+                                            type="text"
+                                            value={form.unit}
+                                            onChange={(e) => setField("unit", e.target.value, index)}
+                                            required
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col md={1} className="d-flex align-items-center">
+                                    <Button
+                                        variant="outline-danger"
+                                        onClick={() => removeIngredientForm(index)}
+                                        style={{ height: "38px", width: "38px", padding: "0" }}
+                                    >
+                                        <Icon path={mdiClose} size={1} />
+                                    </Button>
+                                </Col>
+                            </Row>
+                        ))}
+                    </>
+                );
         }
     }
-
     return (
         <>
             <Modal show={showModal} onHide={handleClose}>
                 <Form noValidate validated={validated} onSubmit={(e) => handleSubmit(e)} >
                     <Modal.Header closeButton>
-                        <Modal.Title>Vytvořit recept</Modal.Title>
+                        <Modal.Title>{recipe ? "Upravit recept" : "Vytvořit recept"}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group className="mb-3">
@@ -177,13 +223,13 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
                             </Form.Control.Feedback>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Description</Form.Label>
+                            <Form.Label>Popis receptu</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 value={formData.description}
                                 onChange={(e) => setField("description", e.target.value)}
                                 rows={8}  // Optional: sets the number of rows for the textarea
-                                maxLength={500}
+                                maxLength={1000}
                             />
                         </Form.Group>
                         {makeIngredientForm()}
@@ -205,7 +251,7 @@ function RecipeForm({showModal, handleCloseModal, onComplete}){
                                 { recipeAddCall.state === 'pending' ? (
                                     <Icon size={0.8} path={mdiLoading} spin={true} />
                                 ) : (
-                                    "Přidat"
+                                    recipe ? "Upravit" : "Přidat"
                                 )}
                             </Button>
                         </div>

@@ -126,7 +126,7 @@
     "id": "854f2f3cb8954916"
   },
   {
-    "name": "Barbecue burger ze zbylého kuřete",
+    "name": "Barbecue burger z nového kuřete",
     "description": "Rozehřejte troubu na 240 °C. Obrané drůbeží maso natrhejte na vlákna, zamíchejte s barbecue omáčkou a rozprostřete do pekáčku. Dejte do trouby a pečte asi 10 minut. Rozpůlené bulky opečte na rozpálené pánvi na sucho z obou stran. Limetu umyjte, nastrouhejte kůru, šťávu vymačkejte a obojí smíchejte s majonézou. Pomocí škrabky udělejte z mrkve tenké proužky. Přendejte je do misky, přidejte špetku soli a pepře a pár kapek limety a promíchejte. Začněte skládat burger. Obě půlky bulek pomažte limetovou majonézou. Na spodní polovinu bulky navrstvěte natrhaný koriandr, na plátky nasekanou chilli papričku, mrkvové proužky, tenká kolečka šalotky a plátek rajčete. Nakonec přidejte vrstvu zapečeného bbq kuřete a plátek cheddaru. Přiklopte vrchní polovinou bulky a podávejte.",
     "imgUri": "https://zachranjidlo.cz/wp-content/uploads/bbq-kure-burger-1024x493-1200x500-c-default.png",
     "ingredients": [
@@ -189,7 +189,7 @@
     "id": "1ae20af4cfa8efc4"
   },
   {
-    "name": "Chřestová polévka",
+    "name": "Chřestová polévka z mrkve",
     "description": "Ve velkém hrnci přiveďte k varu 1000 ml vody. Omytý chřest oloupejte, odlomte dřevnaté konce a dejte je pomalu vařit. Z chřestu odkrojte hlavičky a zbytek chřestu pokrájejte na 1 cm kousky. V hrnci rozehřejte 20 g másla a hlavičky na něm lehce opečte, dejte stranou. Na zbylém másle pomalu restujte nadrobno pokrájenou šalotku a prolisovaný stroužek česneku dosklovata. Přidejte pokrájené stonky chřestu a pomalu restujte dalších 5 minut. Přilijte vývar z chřestu a vařte 15 minut. Vše důkladně promixujte a vraťte do hrnce a vypněte plotýnku. V misce smíchejte žloutky s majonézou a vínem. Směs pomalu vlijte do hrnce s polévkou a za stálého míchání dokud polévka lehce nezhoustne. Lehce polévku přihřejte a dochuťte solí a citronovou šťávou. Polévku ozdobte opečenými hlavičkami chřestu a výhonky hrášku. Servírujte s opečenou bagetou.",
     "imgUri": "https://zachranjidlo.cz/wp-content/uploads/chrestpolevka-1024x427-1200x500-c-default.png",
     "ingredients": [
@@ -219,7 +219,7 @@
         "unit": "ml"
       },
       {
-        "id": "7aea5d7072d9f488",
+        "id": "157003980c0a437a",
         "amount": 2,
         "unit": "ks"
       },
@@ -576,5 +576,11 @@
       }
     ],
     "id": "2419fee7d9492c28"
+  },
+  {
+    "name": "Starej receptos",
+    "description": "asdas",
+    "ingredients": [],
+    "id": "4cc58366a9bcf1b6"
   }
 ]

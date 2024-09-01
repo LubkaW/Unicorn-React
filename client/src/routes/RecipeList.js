@@ -9,24 +9,22 @@ import RecipeForm from "../components/RecipeForm";
 
 function RecipeList() {
 
+
     const [viewType, setViewType] = useState("small")
     const [recipeLoadCall, setRecipeLoadCall] = useState({
         state: "pending",
     });
     const [ingredientsLoadCall, setIngredientsLoadCall] = useState({data: []});
     const [searchBy, setSearchBy] = useState("");
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState({state: false});
 
-    const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
+    const handleAddRecipeModal = function(data) {
+        setShowModal({state: true, data});
+    }
+    const handleCloseModal = () => setShowModal({state: false});
 
     const handleRecipeAdded = (recipe) => {
-        if (recipeLoadCall.state === "success") {
-            setRecipeLoadCall({
-                state: "success",
-                data: [...recipeLoadCall.data, recipe]
-            });
-        }
+        fetchRecipes();
     }
 
     const filteredRecipeList = useMemo(() => {
@@ -40,18 +38,26 @@ function RecipeList() {
         }
     }, [searchBy, recipeLoadCall.data]);
 
-    useEffect(() => {
+    const fetchRecipes = () => {
+        setRecipeLoadCall({ state: "pending" });
         fetch(`http://localhost:3000/recipe/list`, {
             method: "GET",
-        }).then(async (response) => {
-            const responseJson = await response.json();
-            if (response.status >= 400) {
-                setRecipeLoadCall({ state: "error", error: responseJson });
-            } else {
-                setRecipeLoadCall({ state: "success", data: responseJson });
-            }
-        }).catch((err) => {setRecipeLoadCall({ state: "error", error: err });});
-    }, []);
+        })
+            .then(async (response) => {
+                const responseJson = await response.json();
+                if (response.status >= 400) {
+                    setRecipeLoadCall({ state: "error", error: responseJson });
+                } else {
+                    setRecipeLoadCall({ state: "success", data: responseJson });
+                }
+            })
+            .catch((err) => {
+                setRecipeLoadCall({ state: "error", error: err });
+            });
+    };
+
+    useEffect(() => {
+        fetchRecipes()}, []);
 
     useEffect(() => {
         fetch(`http://localhost:3000/ingredient/list`, {
@@ -92,9 +98,9 @@ function RecipeList() {
                             {<RecipeGrid recipes={filteredRecipeList} ingredients={ingredientsLoadCall.data} smallDetail/>}
                         </div>
                         <div className={"d-none d-md-block"} style={{marginTop: '20px'}}>
-                            {viewType === 'small' && <RecipeGrid recipes={filteredRecipeList} ingredients={ingredientsLoadCall.data} smallDetail/>}
-                            {viewType === 'big' && <RecipeGrid recipes={filteredRecipeList}/>}
-                            {viewType === 'table' && <RecipeTable entities={filteredRecipeList}/>}
+                            {viewType === 'small' && <RecipeGrid recipes={filteredRecipeList} ingredients={ingredientsLoadCall.data} handleAddRecipe={handleAddRecipeModal} smallDetail/>}
+                            {viewType === 'big' && <RecipeGrid recipes={filteredRecipeList} handleAddRecipe={handleAddRecipeModal}/>}
+                            {viewType === 'table' && <RecipeTable entities={filteredRecipeList} handleAddRecipe={handleAddRecipeModal}/>}
                         </div>
                     </div>
                 );
@@ -147,13 +153,14 @@ function RecipeList() {
                         </Form>
                     </div>
                     <div>
-                        <Button style={{marginLeft: "8px"}} variant="outline-success" onClick={handleShowModal}>
+                        <Button style={{marginLeft: "8px"}} variant="outline-success" onClick={() => handleAddRecipeModal()}>
                             <Icon path={mdiPlus} size={1} />
                         </Button>
                     </div>
                     <RecipeForm
-                        showModal={showModal}
+                        showModal={showModal.state}
                         handleCloseModal={handleCloseModal}
+                        recipe={showModal.data}
                         onComplete={(recipe) => handleRecipeAdded(recipe)}
                     />
                 </Container>
