@@ -20,6 +20,15 @@ function RecipeList() {
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
 
+    const handleRecipeAdded = (recipe) => {
+        if (recipeLoadCall.state === "success") {
+            setRecipeLoadCall({
+                state: "success",
+                data: [...recipeLoadCall.data, recipe]
+            });
+        }
+    }
+
     const filteredRecipeList = useMemo(() => {
         if (recipeLoadCall.data != null) {
             return recipeLoadCall.data.filter((recipe) => {
@@ -142,7 +151,11 @@ function RecipeList() {
                             <Icon path={mdiPlus} size={1} />
                         </Button>
                     </div>
-                    <RecipeForm showModal={showModal} handleCloseModal={handleCloseModal}/>
+                    <RecipeForm
+                        showModal={showModal}
+                        handleCloseModal={handleCloseModal}
+                        onComplete={(recipe) => handleRecipeAdded(recipe)}
+                    />
                 </Container>
             </Navbar>
 
