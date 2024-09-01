@@ -1,13 +1,16 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Outlet, useNavigate} from "react-router-dom";
-import {Container, Nav, Navbar, Offcanvas} from "react-bootstrap";
+import {Button, Container, Nav, Navbar, Offcanvas} from "react-bootstrap";
+import {useContext} from "react";
+import UserContext from "./UserProvider";
 
 
 function App() {
 
     const title = "LubkaRecipeApp";
     let navigate = useNavigate();
+    const {isAuthorized, handleAuthorize} = useContext(UserContext);
 
     return (
       <div className="App">
@@ -41,6 +44,12 @@ function App() {
                                   IngredientList
                               </Nav.Link>
                           </Nav>
+                          <Button
+                              variant={isAuthorized ? "danger" : "success"}
+                              onClick={handleAuthorize}
+                          >
+                              {isAuthorized ? "Logout" : "Login"}
+                          </Button>
                       </Offcanvas.Body>
                   </Navbar.Offcanvas>
               </Container>

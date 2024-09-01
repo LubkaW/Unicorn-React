@@ -8,19 +8,22 @@ import Home from "./routes/Home";
 import RecipeList from "./routes/RecipeList";
 import RecipeDetail from "./routes/RecipeDetail";
 import IngredientList from "./routes/IngredientList";
+import {UserProvider} from "./UserProvider";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<App />}>
-                <Route path="home" element={<Home />} />
-                <Route path="recipeList" element={<RecipeList />} />
-                <Route path="recipeDetail" element={<RecipeDetail />} />
-                <Route path="ingredientList" element={<IngredientList />} />
-            </Route>
-        </Routes>
-    </BrowserRouter>
+    <UserProvider>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<App />}>
+                    <Route path="home" element={<Home />} />
+                    <Route path="recipeList" element={<RecipeList />} />
+                    <Route path="recipeDetail" element={<RecipeDetail />} />
+                    <Route path="ingredientList" element={<IngredientList />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </UserProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useContext, useEffect, useMemo, useState} from "react";
 import RecipeTable from "../components/RecipeTable";
 import RecipeGrid from "../components/RecipeGrid";
 import {Button, Container, Form, Nav, Navbar} from "react-bootstrap";
@@ -6,9 +6,9 @@ import styles from "../css/recipe-list.module.css"
 import Icon from "@mdi/react";
 import {mdiLoading, mdiMagnify, mdiPlus, mdiTable, mdiViewComfy, mdiViewGrid} from "@mdi/js";
 import RecipeForm from "../components/RecipeForm";
+import UserContext from "../UserProvider";
 
 function RecipeList() {
-
 
     const [viewType, setViewType] = useState("small")
     const [recipeLoadCall, setRecipeLoadCall] = useState({
@@ -17,6 +17,7 @@ function RecipeList() {
     const [ingredientsLoadCall, setIngredientsLoadCall] = useState({data: []});
     const [searchBy, setSearchBy] = useState("");
     const [showModal, setShowModal] = useState({state: false});
+    const {isAuthorized} = useContext(UserContext);
 
     const handleAddRecipeModal = function(data) {
         setShowModal({state: true, data});
@@ -153,9 +154,11 @@ function RecipeList() {
                         </Form>
                     </div>
                     <div>
-                        <Button style={{marginLeft: "8px"}} variant="outline-success" onClick={() => handleAddRecipeModal()}>
-                            <Icon path={mdiPlus} size={1} />
-                        </Button>
+                        {isAuthorized && (
+                            <Button style={{ marginLeft: "8px" }} variant="outline-success" onClick={() => handleAddRecipeModal()}>
+                                <Icon path={mdiPlus} size={1} />
+                            </Button>
+                        )}
                     </div>
                     <RecipeForm
                         showModal={showModal.state}
